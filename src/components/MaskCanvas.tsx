@@ -1,5 +1,5 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import { Eraser, Paintbrush, RotateCcw } from 'lucide-react';
+import { Eraser, Paintbrush } from 'lucide-react';
 import { useT } from '@/i18n/useT';
 
 export interface MaskCanvasHandle {

@@ -19,7 +19,6 @@ import { useT } from '@/i18n/useT';
  */
 // Žádný preview image — Image Studio nemá konkrétní "before" → "after" jako Home Vision.
 // Místo toho zobrazíme dekorativní zelený gradient s ikonkou.
-const PREVIEW_IMG = '';
 
 export function WelcomePage() {
   const t = useT();
