@@ -327,4 +327,134 @@ export function AppPage() {
                         : 'h-10 px-3 rounded-input border border-outline bg-surface-card text-ink-secondary text-[13px] font-medium hover:bg-surface-muted disabled:opacity-50 disabled:cursor-not-allowed'
                     }
                   >
-                    {a
+                    {a}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="md:col-span-2 pt-2 border-t border-outline">
+              <label className="flex items-center gap-2.5 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={addCbreLogo}
+                  onChange={(e) => setAddCbreLogo(e.target.checked)}
+                  className="w-4 h-4 accent-brand-green"
+                />
+                <span className="text-[14px] font-medium text-ink-primary">{t('app.cbreLogo.label')}</span>
+              </label>
+              {addCbreLogo && (
+                <div className="mt-3 ml-6 flex flex-wrap gap-2">
+                  {(['br', 'bl', 'tr', 'tl'] as LogoPosition[]).map((pos) => (
+                    <button
+                      key={pos}
+                      type="button"
+                      onClick={() => setLogoPosition(pos)}
+                      className={
+                        logoPosition === pos
+                          ? 'h-9 px-3 rounded-input border-2 border-brand-green bg-brand-greenTint text-brand-green text-[12px] font-semibold'
+                          : 'h-9 px-3 rounded-input border border-outline bg-surface-card text-ink-secondary text-[12px] font-medium hover:bg-surface-muted'
+                      }
+                    >
+                      {t(`app.cbreLogo.pos.${pos}`)}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+
+        {/* Generate button */}
+        <div className="flex flex-col items-end gap-3">
+          {error && (
+            <div className="self-stretch p-3 bg-red-50 border border-red-200 rounded-input text-red-700 text-[13px]">
+              {error}
+            </div>
+          )}
+          <button
+            type="button"
+            onClick={handleGenerate}
+            disabled={!canGenerate}
+            className="inline-flex items-center gap-2 h-12 px-7 rounded-input bg-brand-primary text-white text-[15px] font-bold hover:bg-brand-green disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-card"
+          >
+            <Sparkles className="w-5 h-5" />
+            {generating
+              ? generatingStage === 'enhance'
+                ? t('app.stage.enhancing')
+                : t('app.generating')
+              : t('app.generate')}
+          </button>
+        </div>
+
+        {/* Result */}
+        {(resultImage || generating) && (
+          <section className="bg-surface-card rounded-card shadow-card border border-outline p-5 md:p-7">
+            <h2 className="text-[14px] uppercase tracking-wider text-ink-secondary font-semibold mb-4">{t('app.result.title')}</h2>
+            {generating && !resultImage && (
+              <div className="aspect-square max-w-2xl mx-auto bg-surface-muted rounded-card flex items-center justify-center">
+                <div className="flex flex-col items-center gap-3">
+                  <div className="w-12 h-12 border-4 border-brand-green border-t-transparent rounded-full animate-spin" />
+                  <p className="text-[14px] text-ink-secondary">{t('app.generating')}</p>
+                </div>
+              </div>
+            )}
+            {resultImage && (
+              <div className="space-y-4">
+                <div className="rounded-card overflow-hidden border border-outline bg-surface-muted">
+                  <img
+                    src={`data:${resultMime};base64,${resultImage}`}
+                    alt="Generated result"
+                    className="w-full h-auto block"
+                  />
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={handleDownload}
+                    className="inline-flex items-center gap-2 h-10 px-4 rounded-input bg-brand-primary text-white text-[14px] font-semibold hover:bg-brand-green transition-colors"
+                  >
+                    <Download className="w-4 h-4" />
+                    {t('app.result.download')}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setShowTextModal(true)}
+                    className="inline-flex items-center gap-2 h-10 px-4 rounded-input border border-outline bg-surface-card text-ink-secondary text-[14px] font-medium hover:bg-surface-muted transition-colors"
+                  >
+                    <Type className="w-4 h-4" />
+                    {t('app.result.addText')}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleIterate}
+                    className="inline-flex items-center gap-2 h-10 px-4 rounded-input border border-outline bg-surface-card text-ink-secondary text-[14px] font-medium hover:bg-surface-muted transition-colors"
+                  >
+                    <RotateCcw className="w-4 h-4" />
+                    {t('app.result.iterate')}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleNewAttempt}
+                    className="inline-flex items-center gap-2 h-10 px-4 rounded-input border border-outline bg-surface-card text-ink-secondary text-[14px] font-medium hover:bg-surface-muted transition-colors"
+                  >
+                    <X className="w-4 h-4" />
+                    {t('app.result.new')}
+                  </button>
+                </div>
+              </div>
+            )}
+          </section>
+        )}
+      </main>
+
+      {showTextModal && resultImage && (
+        <TextOverlayModal
+          imageBase64={resultImage}
+          imageMime={resultMime}
+          onApply={handleTextOverlayApply}
+          onClose={() => setShowTextModal(false)}
+        />
+      )}
+    </div>
+  );
+}
