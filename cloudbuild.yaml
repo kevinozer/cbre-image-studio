@@ -1,0 +1,48 @@
+# Cloud Build pipeline - build Vite + Express runtime, deploy do Cloud Run.
+#
+# DŮLEŽITÉ: GEMINI_API_KEY není v tomto souboru. Je nastaven jako env var na Cloud Run
+# service ručně přes:
+#
+#   gcloud run services update cbre-image-studio \
+#     --region=europe-west1 \
+#     --update-env-vars="GEMINI_API_KEY=<TVŮJ_KLÍČ>"
+#
+# Cloud Build deploy příkaz (níže) NEPŘEPISUJE existující env vary, takže klíč se
+# nastaví jednorázově a přežije všechny budoucí deployy.
+
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '--build-arg=VITE_APP_PASSWORD=${_APP_PASSWORD}'
+      - '--build-arg=VITE_MARKETPLACE_URL=${_MARKETPLACE_URL}'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/cbre-image-studio:$COMMIT_SHA'
+      - '.'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'gcr.io/$PROJECT_ID/cbre-image-studio:$COMMIT_SHA'
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - 'cbre-image-studio'
+      - '--image=gcr.io/$PROJECT_ID/cbre-image-studio:$COMMIT_SHA'
+      - '--region=europe-west1'
+      - '--platform=managed'
+      - '--allow-unauthenticated'
+      - '--port=8080'
+      - '--cpu=1'
+      - '--memory=512Mi'
+      - '--timeout=300'
+
+substitutions:
+  _APP_PASSWORD: 'cbre*'
+  _MARKETPLACE_URL: 'https://cbre-marketplace.netlify.app'
+
+options:
+  logging: CLOUD_LOGGING_ONLY

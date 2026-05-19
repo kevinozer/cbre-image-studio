@@ -1,0 +1,108 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/**
+ * Tema barev - light a dark.
+ *
+ * Implementační detail: barvy jsou definovány jako RGB triplety
+ * v CSS variables, které pak Tailwind rozhrabe přes rgb(var(...) / <alpha-value>).
+ * Toggle dark mode se děje přes class="dark" na <html>.
+ *
+ * Čísla nereprezentují HEX, jsou to R, G, B složky 0-255.
+ */
+@layer base {
+  :root {
+    /* Surface */
+    --color-surface-page: 245 247 248;       /* #F5F7F8 */
+    --color-surface-card: 255 255 255;       /* #FFFFFF */
+    --color-surface-muted: 237 239 241;      /* #EDEFF1 */
+    --color-surface-heroDark: 0 63 45;       /* #003F2D */
+
+    /* Ink (text) */
+    --color-ink-primary: 26 31 28;           /* #1A1F1C */
+    --color-ink-secondary: 71 82 89;         /* #475259 */
+    --color-ink-muted: 122 135 143;          /* #7A878F */
+    --color-ink-disabled: 176 183 187;       /* #B0B7BB */
+
+    /* Borders */
+    --color-outline: 229 232 235;            /* #E5E8EB */
+
+    /* Brand greens fixed in light/dark */
+    --color-brand-primary: 0 63 45;          /* #003F2D */
+    --color-brand-primaryHover: 23 71 42;    /* #17472A */
+    --color-brand-green: 34 160 107;         /* #22A06B */
+    --color-brand-greenTint: 230 244 236;    /* #E6F4EC */
+  }
+
+  html.dark {
+    /* Dark surface palette - tlumené, ne pure black */
+    --color-surface-page: 11 16 13;          /* near-black with green tint */
+    --color-surface-card: 21 27 24;          /* slightly lighter card */
+    --color-surface-muted: 29 36 32;
+    --color-surface-heroDark: 0 39 28;       /* deeper than brand primary */
+
+    /* Ink in dark mode */
+    --color-ink-primary: 232 237 233;        /* near white */
+    --color-ink-secondary: 178 188 184;
+    --color-ink-muted: 132 145 140;
+    --color-ink-disabled: 84 96 90;
+
+    /* Borders */
+    --color-outline: 42 50 46;
+
+    /* Brand: green accent stays vibrant; primary is shifted to lighter */
+    --color-brand-primary: 13 70 50;         /* darker green for top bar */
+    --color-brand-primaryHover: 18 84 60;
+    --color-brand-green: 56 192 134;         /* brighter for contrast */
+    --color-brand-greenTint: 30 56 44;       /* deep tint */
+  }
+
+  html, body, #root { height: 100%; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background-color: rgb(var(--color-surface-page));
+    color: rgb(var(--color-ink-primary));
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+  *:focus-visible {
+    outline: 2px solid rgb(var(--color-brand-green));
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+@layer components {
+  .app-container {
+    @apply mx-auto w-full max-w-container px-6 md:px-8;
+  }
+}
+
+/* ============================================================================
+ * Mobile responsivita chatbot widget (#cbre-chatbot-bubble + panel).
+ * Widget je injectovaný externím skriptem s pevnými 56x56 styly a fixed
+ * pozicí right:24px / bottom:24px. Na úzkých mobilních viewportech to
+ * přesahovalo viewport nebo kolidovalo s content. Tento override widget
+ * na mobile zmenšuje a posunuje blíž k rohu, aby zůstal dostupný.
+ * Desktop/tablet (>= 768px) zůstává netknutý.
+ * ========================================================================= */
+@media (max-width: 767px) {
+  #cbre-chatbot-bubble {
+    width: 44px !important;
+    height: 44px !important;
+    right: 12px !important;
+    bottom: 12px !important;
+  }
+  #cbre-chatbot-bubble svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+  #cbre-chatbot-panel {
+    right: 8px !important;
+    bottom: 8px !important;
+    max-width: calc(100vw - 16px) !important;
+    max-height: calc(100vh - 16px) !important;
+  }
+}
+
