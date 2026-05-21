@@ -42,7 +42,7 @@ steps:
 
 substitutions:
   _APP_PASSWORD: 'cbre*'
-  _MARKETPLACE_URL: 'https://cbre-marketplace.netlify.app'
+  _MARKETPLACE_URL: 'https://cbrecz.netlify.app'
 
 options:
   logging: CLOUD_LOGGING_ONLY

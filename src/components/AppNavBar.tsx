@@ -17,7 +17,7 @@ import { useT } from '@/i18n/useT';
  */
 const MARKETPLACE_URL =
   (import.meta as { env?: { VITE_MARKETPLACE_URL?: string } }).env?.VITE_MARKETPLACE_URL ||
-  'https://cbre-marketplace.netlify.app';
+  'https://cbrecz.netlify.app';
 
 export function AppNavBar() {
   const t = useT();

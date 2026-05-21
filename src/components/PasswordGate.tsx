@@ -11,7 +11,7 @@ import { ArrowLeft, Globe } from 'lucide-react';
 const APP_PASSWORD = 'cbre*';  // hardcoded — ignoruje Cloud Run env var VITE_APP_PASSWORD
 const APP_TITLE = 'CBRE - Image Studio';
 const MARKETPLACE_URL =
-  import.meta.env.VITE_MARKETPLACE_URL || 'https://cbre-marketplace.netlify.app';
+  import.meta.env.VITE_MARKETPLACE_URL || 'https://cbrecz.netlify.app';
 
 type Lang = 'cs' | 'en' | 'sk';
 
