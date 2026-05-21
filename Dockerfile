@@ -14,7 +14,7 @@ COPY . .
 
 # Build-time env (Cloud Build substitutions)
 ARG VITE_APP_PASSWORD=cbre*
-ARG VITE_MARKETPLACE_URL=https://cbre-marketplace.netlify.app
+ARG VITE_MARKETPLACE_URL=https://cbrecz.netlify.app
 ENV VITE_APP_PASSWORD=$VITE_APP_PASSWORD
 ENV VITE_MARKETPLACE_URL=$VITE_MARKETPLACE_URL
 
